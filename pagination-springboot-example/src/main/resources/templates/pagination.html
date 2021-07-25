@@ -63,43 +63,69 @@
 <body>
     <div>hello pagination!</div>
     <div id="wrapper">
-        <form action="/pagination" th:object="${userForm}">
-            <table class="pure-table">
-                <tr>
-                    <td>
-                        No.
-                    </td>
-                    <td>
-                        ID
-                    </td>
-                    <td>
-                        Username
-                    </td>
-                    <td>
-                        Password
-                    </td>
-                </tr>
-                <tbody>
-                    <tr th:each="user,userStatus:${userForm.userList}">
-                        <td th:text="${userStatus.count}">
+        <form action="/pagination" th:object="${userForm}" id="form">
+            <div>
+                <input type="text" th:value="${userForm.address}" th:field="*{address}" />
+            </div>
+            <div>
+                <table class="pure-table">
+                    <tr>
+                        <td>
+                            No.
                         </td>
-                        <td th:text="${user.id}">
+                        <td>
+                            ID
                         </td>
-                        <td th:text="${user.username}">
+                        <td>
+                            Username
                         </td>
-                        <td th:text="${user.password}">
+                        <td>
+                            Password
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                    <tbody th:object="${page}">
+                        <tr th:each="user,userStatus:${page.list}">
+                            <td th:text="${userStatus.count}">
+                            </td>
+                            <td th:text="${user.id}">
+                            </td>
+                            <td th:text="${user.username}">
+                            </td>
+                            <td th:text="${user.password}">
+                            </td>
+                        </tr>
+                        <input type="text" th:field="*{totalPage}" id="currentPage"/>
+                    </tbody>
+                </table>
+            </div>
             <br>
             <div>
                 <ul>
                     <li class="ui-icon-seek-prev">
-                        <a th:href="@{${url}(pageNum=${page.upper})}">上一页</a>
+<!--                        <a th:href="@{${url}(pageNum=${page.upper})}">上一页</a>-->
+                        <a href="#" th:onclick="changePage(1)">上一页</a>
                     </li>
                 </ul>
             </div>
+            <script type="text/javascript" th:src="@{/js/jQuery3.6.0.js}"></script>
+            <script>
+                function changePage(num){
+                    let address = "[[${userForm.address}]]";
+                    let pageNum = num+1;
+                    console.log("click");
+                    console.log(address);
+                    console.log(pageNum);
+
+                    /*let btn = $('<button></button>');
+                    btn.attr("type","submit");
+                    btn.attr("name","currentPage");
+                    btn.attr("value",pageNum);
+                    $("#form").append(btn);*/
+
+                    $("#currentPage").val(pageNum);
+                    $("#form").submit();
+                }
+            </script>
             <div>
                 <button type="submit">submit</button>
             </div>

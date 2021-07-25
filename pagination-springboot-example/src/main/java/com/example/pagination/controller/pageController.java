@@ -15,30 +15,34 @@ public class pageController {
 
     @RequestMapping("/showPage")
     public String initPaginationHtml(ModelMap model){
+        //get list from database
         List<Users> list = new ArrayList<>();
         list.add(new Users(123,"Lily","abc123"));
         list.add(new Users(223,"Jack","abc123"));
         list.add(new Users(323,"Tom","abc123"));
 
+        Page<Users> page = new Page<>();
         Users userForm = new Users();
-        userForm.setUserList(list);
+        page.setList(list);
+        page.setPageSize(20);
+//        userForm.setPage(page);
+        userForm.setAddress("北京");
         model.addAttribute("userForm",userForm);
-
-        String url = "/pagination";
-        Page<Users> page= new Page<Users>();
-        model.addAttribute("url",url);
         model.addAttribute("page",page);
+
+//        String url = "/pagination";
+//        model.addAttribute("url",url);
+//        model.addAttribute("page",page);
 
         return "pagination";
     }
 
     @RequestMapping("pagination")
     public String toPage(@ModelAttribute("userForm") Users userForm,
-        @ModelAttribute("page") Page page,ModelMap model,
-                         @ModelAttribute("pageNum") String pageNum){
+        @ModelAttribute("page") Page page, ModelMap model){
 
-        Page page1 = (Page)model.getAttribute("page");
-        model.addAttribute("userForm", userForm);
+        String currentPage = (String) model.getAttribute("currentPage");
+//        model.addAttribute("userForm", userForm);
         return "pagination";
     }
 }
